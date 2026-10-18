@@ -1,0 +1,322 @@
+{
+  "title": "Page-aware document evidence — synthetic teaching example",
+  "pages": [
+    {
+      "page": 1,
+      "text": "# **Page-aware document evidence**\n\nABSTRACT\n\nThis synthetic teaching paper studies page-aware evidence linking for local document\n\nreaders.\n\nThe core question is whether stable source identifiers can preserve traceability through\n\nchunked analysis.\n\nOur contribution is a source-first pipeline that keeps page numbers and verbatim text beside\n\neach finding.\n\nThe teaching example contains no real experiment and no external research claims.\n\nINTRODUCTION\n\nLong documents can hide important limitations near the end. Processing only the abstract\n\nloses this evidence.\n\nWe use a local PDF extractor followed by bounded model requests and a self-contained\n\nreading dashboard.\n\n\nPaperWeave synthetic teaching fixture / 1\n\n\n"
+    },
+    {
+      "page": 2,
+      "text": "# **Method: sources before summaries**\n\nMETHOD\n\nEach paragraph receives a stable source identifier and the physical PDF page number.\n\nThe model returns a concise finding, a reader-friendly explanation, and a verbatim evidence\n\nquote.\n\nAn exact normalized text match checks that the quoted words exist in the extracted source.\n\nA matching quote does not prove that a model conclusion is semantically correct.\n\nARGUMENT\n\nFirst preserve the sources, then analyze each chunk, and finally merge findings without\n\ndeleting leaves.\n\n\nPaperWeave synthetic teaching fixture / 2\n\n\n"
+    },
+    {
+      "page": 3,
+      "text": "# **A controlled illustration**\n\nILLUSTRATIVE EVALUATION\n\nThe fixture uses a deterministic local response server to test the complete software path.\n\nIt is not an evaluation of a real language model and cannot establish scientific accuracy.\n\nThe dashboard includes searchable nodes, evidence panels, diagram switching, and offline\n\nexports.\n\nThe implementation records analyzed chunk identifiers so omitted processing steps remain\n\nvisible.\n\n\nPaperWeave synthetic teaching fixture / 3\n\n\n"
+    },
+    {
+      "page": 4,
+      "text": "# **Limits and application boundary**\n\nLIMITATIONS\n\nThis demonstration uses synthetic text and does not measure performance on real scientific\n\npapers.\n\nImage-only scans require OCR before use in the text-PDF baseline.\n\nEvidence matching confirms text presence rather than entailment of the model claim.\n\nAPPLICATION BOUNDARY\n\nThe tool supports assisted reading, while numerical claims and scientific conclusions need\n\nhuman checking.\n\nTAIL_SENTINEL: The last page must be analyzed and included in the coverage report.\n\n\nPaperWeave synthetic teaching fixture / 4\n\n\n"
+    }
+  ],
+  "sources": [
+    {
+      "id": "p0001b00001",
+      "page": 1,
+      "section": "**Page-aware document evidence**",
+      "text": "# **Page-aware document evidence**"
+    },
+    {
+      "id": "p0001b00002",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "ABSTRACT"
+    },
+    {
+      "id": "p0001b00003",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "This synthetic teaching paper studies page-aware evidence linking for local document"
+    },
+    {
+      "id": "p0001b00004",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "readers."
+    },
+    {
+      "id": "p0001b00005",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "The core question is whether stable source identifiers can preserve traceability through"
+    },
+    {
+      "id": "p0001b00006",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "chunked analysis."
+    },
+    {
+      "id": "p0001b00007",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "Our contribution is a source-first pipeline that keeps page numbers and verbatim text beside"
+    },
+    {
+      "id": "p0001b00008",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "each finding."
+    },
+    {
+      "id": "p0001b00009",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "The teaching example contains no real experiment and no external research claims."
+    },
+    {
+      "id": "p0001b00010",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "INTRODUCTION"
+    },
+    {
+      "id": "p0001b00011",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "Long documents can hide important limitations near the end. Processing only the abstract"
+    },
+    {
+      "id": "p0001b00012",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "loses this evidence."
+    },
+    {
+      "id": "p0001b00013",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "We use a local PDF extractor followed by bounded model requests and a self-contained"
+    },
+    {
+      "id": "p0001b00014",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "reading dashboard."
+    },
+    {
+      "id": "p0001b00015",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "PaperWeave synthetic teaching fixture / 1"
+    },
+    {
+      "id": "p0002b00016",
+      "page": 2,
+      "section": "**Method: sources before summaries**",
+      "text": "# **Method: sources before summaries**"
+    },
+    {
+      "id": "p0002b00017",
+      "page": 2,
+      "section": "METHOD",
+      "text": "METHOD"
+    },
+    {
+      "id": "p0002b00018",
+      "page": 2,
+      "section": "METHOD",
+      "text": "Each paragraph receives a stable source identifier and the physical PDF page number."
+    },
+    {
+      "id": "p0002b00019",
+      "page": 2,
+      "section": "METHOD",
+      "text": "The model returns a concise finding, a reader-friendly explanation, and a verbatim evidence"
+    },
+    {
+      "id": "p0002b00020",
+      "page": 2,
+      "section": "METHOD",
+      "text": "quote."
+    },
+    {
+      "id": "p0002b00021",
+      "page": 2,
+      "section": "METHOD",
+      "text": "An exact normalized text match checks that the quoted words exist in the extracted source."
+    },
+    {
+      "id": "p0002b00022",
+      "page": 2,
+      "section": "METHOD",
+      "text": "A matching quote does not prove that a model conclusion is semantically correct."
+    },
+    {
+      "id": "p0002b00023",
+      "page": 2,
+      "section": "METHOD",
+      "text": "ARGUMENT"
+    },
+    {
+      "id": "p0002b00024",
+      "page": 2,
+      "section": "METHOD",
+      "text": "First preserve the sources, then analyze each chunk, and finally merge findings without"
+    },
+    {
+      "id": "p0002b00025",
+      "page": 2,
+      "section": "METHOD",
+      "text": "deleting leaves."
+    },
+    {
+      "id": "p0002b00026",
+      "page": 2,
+      "section": "METHOD",
+      "text": "PaperWeave synthetic teaching fixture / 2"
+    },
+    {
+      "id": "p0003b00027",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "# **A controlled illustration**"
+    },
+    {
+      "id": "p0003b00028",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "ILLUSTRATIVE EVALUATION"
+    },
+    {
+      "id": "p0003b00029",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "The fixture uses a deterministic local response server to test the complete software path."
+    },
+    {
+      "id": "p0003b00030",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "It is not an evaluation of a real language model and cannot establish scientific accuracy."
+    },
+    {
+      "id": "p0003b00031",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "The dashboard includes searchable nodes, evidence panels, diagram switching, and offline"
+    },
+    {
+      "id": "p0003b00032",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "exports."
+    },
+    {
+      "id": "p0003b00033",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "The implementation records analyzed chunk identifiers so omitted processing steps remain"
+    },
+    {
+      "id": "p0003b00034",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "visible."
+    },
+    {
+      "id": "p0003b00035",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "PaperWeave synthetic teaching fixture / 3"
+    },
+    {
+      "id": "p0004b00036",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "# **Limits and application boundary**"
+    },
+    {
+      "id": "p0004b00037",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "LIMITATIONS"
+    },
+    {
+      "id": "p0004b00038",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "This demonstration uses synthetic text and does not measure performance on real scientific"
+    },
+    {
+      "id": "p0004b00039",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "papers."
+    },
+    {
+      "id": "p0004b00040",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "Image-only scans require OCR before use in the text-PDF baseline."
+    },
+    {
+      "id": "p0004b00041",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "Evidence matching confirms text presence rather than entailment of the model claim."
+    },
+    {
+      "id": "p0004b00042",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "APPLICATION BOUNDARY"
+    },
+    {
+      "id": "p0004b00043",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "The tool supports assisted reading, while numerical claims and scientific conclusions need"
+    },
+    {
+      "id": "p0004b00044",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "human checking."
+    },
+    {
+      "id": "p0004b00045",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "TAIL_SENTINEL: The last page must be analyzed and included in the coverage report."
+    },
+    {
+      "id": "p0004b00046",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "PaperWeave synthetic teaching fixture / 4"
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Preamble",
+      "text": "# **Page-aware document evidence**",
+      "level": 1
+    },
+    {
+      "heading": "ABSTRACT",
+      "text": "This synthetic teaching paper studies page-aware evidence linking for local document\n\nreaders.\n\nThe core question is whether stable source identifiers can preserve traceability through\n\nchunked analysis.\n\nOur contribution is a source-first pipeline that keeps page numbers and verbatim text beside\n\neach finding.\n\nThe teaching example contains no real experiment and no external research claims.",
+      "level": 1
+    },
+    {
+      "heading": "INTRODUCTION",
+      "text": "Long documents can hide important limitations near the end. Processing only the abstract\n\nloses this evidence.\n\nWe use a local PDF extractor followed by bounded model requests and a self-contained\n\nreading dashboard.\n\n\nPaperWeave synthetic teaching fixture / 1\n\n\n\n\n# **Method: sources before summaries**",
+      "level": 1
+    },
+    {
+      "heading": "METHOD",
+      "text": "Each paragraph receives a stable source identifier and the physical PDF page number.\n\nThe model returns a concise finding, a reader-friendly explanation, and a verbatim evidence\n\nquote.\n\nAn exact normalized text match checks that the quoted words exist in the extracted source.\n\nA matching quote does not prove that a model conclusion is semantically correct.\n\nARGUMENT\n\nFirst preserve the sources, then analyze each chunk, and finally merge findings without\n\ndeleting leaves.\n\n\nPaperWeave synthetic teaching fixture / 2\n\n\n\n\n# **A controlled illustration**\n\nILLUSTRATIVE EVALUATION\n\nThe fixture uses a deterministic local response server to test the complete software path.\n\nIt is not an evaluation of a real language model and cannot establish scientific accuracy.\n\nThe dashboard includes searchable nodes, evidence panels, diagram switching, and offline\n\nexports.\n\nThe implementation records analyzed chunk identifiers so omitted processing steps remain\n\nvisible.\n\n\nPaperWeave synthetic teaching fixture / 3\n\n\n\n\n# **Limits and application boundary**\n\nLIMITATIONS\n\nThis demonstration uses synthetic text and does not measure performance on real scientific\n\npapers.\n\nImage-only scans require OCR before use in the text-PDF baseline.\n\nEvidence matching confirms text presence rather than entailment of the model claim.\n\nAPPLICATION BOUNDARY\n\nThe tool supports assisted reading, while numerical claims and scientific conclusions need\n\nhuman checking.\n\nTAIL_SENTINEL: The last page must be analyzed and included in the coverage report.\n\n\nPaperWeave synthetic teaching fixture / 4",
+      "level": 1
+    }
+  ],
+  "warnings": []
+}

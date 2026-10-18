@@ -1,0 +1,7 @@
+Source: https://github.com/Dicklesworthstone/mindmap-generator
+Author / repository owner: Dicklesworthstone
+Commit: 4b835da675c17cf19f286591a975385d690c8460
+Original README License section: MIT License.
+No standalone LICENSE file was present in this commit.
+Adapted functions: _generate_mermaid_mindmap, _add_node_to_mindmap.
+See THIRD_PARTY_NOTICES.md for modifications.

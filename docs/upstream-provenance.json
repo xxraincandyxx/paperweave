@@ -1,0 +1,15 @@
+{
+  "scholarflow": {
+    "commit": "cc66f78379493ad230ada60dbedf420165057230",
+    "files": {
+      "scholarflow/models.py": "afff650c0344c145f06cd43338196329ba626076aa413edae928e31126229a9d",
+      "scholarflow/parser/pdf_parser.py": "65113b7662790c6cc8f9d8af7eb7a39740221fb703e4f519eb9aba07d7e3d39b"
+    }
+  },
+  "mindmap-generator": {
+    "commit": "4b835da675c17cf19f286591a975385d690c8460",
+    "files": {
+      "mindmap_generator.py": "2fa8e235cf8047f533f1757e520203ea758ea199dccc683cbb3fe8bb5534af23"
+    }
+  }
+}

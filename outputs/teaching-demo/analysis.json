@@ -1,0 +1,664 @@
+{
+  "version": "1.0.0",
+  "title": "Page-aware document evidence — synthetic teaching example",
+  "filename": "teaching-paper.pdf",
+  "created_at": "2026-10-18T14:27:17.845941+00:00",
+  "sha256": "1dcb8332bd94d8ae50af2b59660a2e45b0c87097f40f33766fa54bf0897fd635",
+  "pages": [
+    {
+      "page": 1,
+      "text": "# **Page-aware document evidence**\n\nABSTRACT\n\nThis synthetic teaching paper studies page-aware evidence linking for local document\n\nreaders.\n\nThe core question is whether stable source identifiers can preserve traceability through\n\nchunked analysis.\n\nOur contribution is a source-first pipeline that keeps page numbers and verbatim text beside\n\neach finding.\n\nThe teaching example contains no real experiment and no external research claims.\n\nINTRODUCTION\n\nLong documents can hide important limitations near the end. Processing only the abstract\n\nloses this evidence.\n\nWe use a local PDF extractor followed by bounded model requests and a self-contained\n\nreading dashboard.\n\n\nPaperWeave synthetic teaching fixture / 1\n\n\n"
+    },
+    {
+      "page": 2,
+      "text": "# **Method: sources before summaries**\n\nMETHOD\n\nEach paragraph receives a stable source identifier and the physical PDF page number.\n\nThe model returns a concise finding, a reader-friendly explanation, and a verbatim evidence\n\nquote.\n\nAn exact normalized text match checks that the quoted words exist in the extracted source.\n\nA matching quote does not prove that a model conclusion is semantically correct.\n\nARGUMENT\n\nFirst preserve the sources, then analyze each chunk, and finally merge findings without\n\ndeleting leaves.\n\n\nPaperWeave synthetic teaching fixture / 2\n\n\n"
+    },
+    {
+      "page": 3,
+      "text": "# **A controlled illustration**\n\nILLUSTRATIVE EVALUATION\n\nThe fixture uses a deterministic local response server to test the complete software path.\n\nIt is not an evaluation of a real language model and cannot establish scientific accuracy.\n\nThe dashboard includes searchable nodes, evidence panels, diagram switching, and offline\n\nexports.\n\nThe implementation records analyzed chunk identifiers so omitted processing steps remain\n\nvisible.\n\n\nPaperWeave synthetic teaching fixture / 3\n\n\n"
+    },
+    {
+      "page": 4,
+      "text": "# **Limits and application boundary**\n\nLIMITATIONS\n\nThis demonstration uses synthetic text and does not measure performance on real scientific\n\npapers.\n\nImage-only scans require OCR before use in the text-PDF baseline.\n\nEvidence matching confirms text presence rather than entailment of the model claim.\n\nAPPLICATION BOUNDARY\n\nThe tool supports assisted reading, while numerical claims and scientific conclusions need\n\nhuman checking.\n\nTAIL_SENTINEL: The last page must be analyzed and included in the coverage report.\n\n\nPaperWeave synthetic teaching fixture / 4\n\n\n"
+    }
+  ],
+  "sources": [
+    {
+      "id": "p0001b00001",
+      "page": 1,
+      "section": "**Page-aware document evidence**",
+      "text": "# **Page-aware document evidence**"
+    },
+    {
+      "id": "p0001b00002",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "ABSTRACT"
+    },
+    {
+      "id": "p0001b00003",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "This synthetic teaching paper studies page-aware evidence linking for local document"
+    },
+    {
+      "id": "p0001b00004",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "readers."
+    },
+    {
+      "id": "p0001b00005",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "The core question is whether stable source identifiers can preserve traceability through"
+    },
+    {
+      "id": "p0001b00006",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "chunked analysis."
+    },
+    {
+      "id": "p0001b00007",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "Our contribution is a source-first pipeline that keeps page numbers and verbatim text beside"
+    },
+    {
+      "id": "p0001b00008",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "each finding."
+    },
+    {
+      "id": "p0001b00009",
+      "page": 1,
+      "section": "ABSTRACT",
+      "text": "The teaching example contains no real experiment and no external research claims."
+    },
+    {
+      "id": "p0001b00010",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "INTRODUCTION"
+    },
+    {
+      "id": "p0001b00011",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "Long documents can hide important limitations near the end. Processing only the abstract"
+    },
+    {
+      "id": "p0001b00012",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "loses this evidence."
+    },
+    {
+      "id": "p0001b00013",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "We use a local PDF extractor followed by bounded model requests and a self-contained"
+    },
+    {
+      "id": "p0001b00014",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "reading dashboard."
+    },
+    {
+      "id": "p0001b00015",
+      "page": 1,
+      "section": "INTRODUCTION",
+      "text": "PaperWeave synthetic teaching fixture / 1"
+    },
+    {
+      "id": "p0002b00016",
+      "page": 2,
+      "section": "**Method: sources before summaries**",
+      "text": "# **Method: sources before summaries**"
+    },
+    {
+      "id": "p0002b00017",
+      "page": 2,
+      "section": "METHOD",
+      "text": "METHOD"
+    },
+    {
+      "id": "p0002b00018",
+      "page": 2,
+      "section": "METHOD",
+      "text": "Each paragraph receives a stable source identifier and the physical PDF page number."
+    },
+    {
+      "id": "p0002b00019",
+      "page": 2,
+      "section": "METHOD",
+      "text": "The model returns a concise finding, a reader-friendly explanation, and a verbatim evidence"
+    },
+    {
+      "id": "p0002b00020",
+      "page": 2,
+      "section": "METHOD",
+      "text": "quote."
+    },
+    {
+      "id": "p0002b00021",
+      "page": 2,
+      "section": "METHOD",
+      "text": "An exact normalized text match checks that the quoted words exist in the extracted source."
+    },
+    {
+      "id": "p0002b00022",
+      "page": 2,
+      "section": "METHOD",
+      "text": "A matching quote does not prove that a model conclusion is semantically correct."
+    },
+    {
+      "id": "p0002b00023",
+      "page": 2,
+      "section": "METHOD",
+      "text": "ARGUMENT"
+    },
+    {
+      "id": "p0002b00024",
+      "page": 2,
+      "section": "METHOD",
+      "text": "First preserve the sources, then analyze each chunk, and finally merge findings without"
+    },
+    {
+      "id": "p0002b00025",
+      "page": 2,
+      "section": "METHOD",
+      "text": "deleting leaves."
+    },
+    {
+      "id": "p0002b00026",
+      "page": 2,
+      "section": "METHOD",
+      "text": "PaperWeave synthetic teaching fixture / 2"
+    },
+    {
+      "id": "p0003b00027",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "# **A controlled illustration**"
+    },
+    {
+      "id": "p0003b00028",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "ILLUSTRATIVE EVALUATION"
+    },
+    {
+      "id": "p0003b00029",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "The fixture uses a deterministic local response server to test the complete software path."
+    },
+    {
+      "id": "p0003b00030",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "It is not an evaluation of a real language model and cannot establish scientific accuracy."
+    },
+    {
+      "id": "p0003b00031",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "The dashboard includes searchable nodes, evidence panels, diagram switching, and offline"
+    },
+    {
+      "id": "p0003b00032",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "exports."
+    },
+    {
+      "id": "p0003b00033",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "The implementation records analyzed chunk identifiers so omitted processing steps remain"
+    },
+    {
+      "id": "p0003b00034",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "visible."
+    },
+    {
+      "id": "p0003b00035",
+      "page": 3,
+      "section": "**A controlled illustration**",
+      "text": "PaperWeave synthetic teaching fixture / 3"
+    },
+    {
+      "id": "p0004b00036",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "# **Limits and application boundary**"
+    },
+    {
+      "id": "p0004b00037",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "LIMITATIONS"
+    },
+    {
+      "id": "p0004b00038",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "This demonstration uses synthetic text and does not measure performance on real scientific"
+    },
+    {
+      "id": "p0004b00039",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "papers."
+    },
+    {
+      "id": "p0004b00040",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "Image-only scans require OCR before use in the text-PDF baseline."
+    },
+    {
+      "id": "p0004b00041",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "Evidence matching confirms text presence rather than entailment of the model claim."
+    },
+    {
+      "id": "p0004b00042",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "APPLICATION BOUNDARY"
+    },
+    {
+      "id": "p0004b00043",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "The tool supports assisted reading, while numerical claims and scientific conclusions need"
+    },
+    {
+      "id": "p0004b00044",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "human checking."
+    },
+    {
+      "id": "p0004b00045",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "TAIL_SENTINEL: The last page must be analyzed and included in the coverage report."
+    },
+    {
+      "id": "p0004b00046",
+      "page": 4,
+      "section": "**Limits and application boundary**",
+      "text": "PaperWeave synthetic teaching fixture / 4"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0001",
+      "label": "稳定来源能否穿过分块流程",
+      "topic": "可追溯阅读的研究问题",
+      "kind": "question",
+      "detail": "The core question is whether stable source identifiers can preserve traceability through",
+      "explanation": "把信息拆开分析之后，还能找到它最初在哪一页吗？",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0001b00005",
+          "quote": "The core question is whether stable source identifiers can preserve traceability through",
+          "page": 1,
+          "section": "ABSTRACT",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    },
+    {
+      "id": "n0002",
+      "label": "先保留来源，再组织结论",
+      "topic": "来源优先的处理流程",
+      "kind": "contribution",
+      "detail": "Our contribution is a source-first pipeline that keeps page numbers and verbatim text beside",
+      "explanation": "先给原文编号，再让每条发现指回它的依据。",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0001b00007",
+          "quote": "Our contribution is a source-first pipeline that keeps page numbers and verbatim text beside",
+          "page": 1,
+          "section": "ABSTRACT",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    },
+    {
+      "id": "n0003",
+      "label": "导图与证据打包在单个看板",
+      "topic": "离线交付与阅读体验",
+      "kind": "method",
+      "detail": "We use a local PDF extractor followed by bounded model requests and a self-contained",
+      "explanation": "渲染代码和论文内容一起放进 HTML 文件。",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0001b00013",
+          "quote": "We use a local PDF extractor followed by bounded model requests and a self-contained",
+          "page": 1,
+          "section": "INTRODUCTION",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    },
+    {
+      "id": "n0004",
+      "label": "段落绑定来源 ID 与页码",
+      "topic": "来源优先的处理流程",
+      "kind": "method",
+      "detail": "Each paragraph receives a stable source identifier and the physical PDF page number.",
+      "explanation": "每段文字都有自己的编号和 PDF 页序。",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0002b00018",
+          "quote": "Each paragraph receives a stable source identifier and the physical PDF page number.",
+          "page": 2,
+          "section": "METHOD",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    },
+    {
+      "id": "n0005",
+      "label": "原文匹配不等于结论成立",
+      "topic": "核对与阅读边界",
+      "kind": "boundary",
+      "detail": "A matching quote does not prove that a model conclusion is semantically correct.",
+      "explanation": "能找到引文，还需要再看它是否真的支持结论。",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0002b00022",
+          "quote": "A matching quote does not prove that a model conclusion is semantically correct.",
+          "page": 2,
+          "section": "METHOD",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    },
+    {
+      "id": "n0006",
+      "label": "先提取，再分析，最后合并",
+      "topic": "来源优先的处理流程",
+      "kind": "argument",
+      "detail": "First preserve the sources, then analyze each chunk, and finally merge findings without",
+      "explanation": "先建证据底稿，然后逐块阅读，最后组织主题。",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0002b00024",
+          "quote": "First preserve the sources, then analyze each chunk, and finally merge findings without",
+          "page": 2,
+          "section": "METHOD",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    },
+    {
+      "id": "n0007",
+      "label": "测试响应不能代表模型质量",
+      "topic": "核对与阅读边界",
+      "kind": "limitation",
+      "detail": "It is not an evaluation of a real language model and cannot establish scientific accuracy.",
+      "explanation": "软件跑通和模型读懂论文是两件需要分别验证的事。",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0003b00030",
+          "quote": "It is not an evaluation of a real language model and cannot establish scientific accuracy.",
+          "page": 3,
+          "section": "**A controlled illustration**",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    },
+    {
+      "id": "n0008",
+      "label": "分析分块留有覆盖记录",
+      "topic": "离线交付与阅读体验",
+      "kind": "result",
+      "detail": "The implementation records analyzed chunk identifiers so omitted processing steps remain",
+      "explanation": "可以检查每个片段是否实际经过处理。",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0003b00033",
+          "quote": "The implementation records analyzed chunk identifiers so omitted processing steps remain",
+          "page": 3,
+          "section": "**A controlled illustration**",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    },
+    {
+      "id": "n0009",
+      "label": "教学文本不能替代真实论文验证",
+      "topic": "核对与阅读边界",
+      "kind": "limitation",
+      "detail": "This demonstration uses synthetic text and does not measure performance on real scientific",
+      "explanation": "这个示例用于测试流程，不用于证明科研分析准确率。",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0004b00038",
+          "quote": "This demonstration uses synthetic text and does not measure performance on real scientific",
+          "page": 4,
+          "section": "**Limits and application boundary**",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    },
+    {
+      "id": "n0010",
+      "label": "扫描论文需要先执行 OCR",
+      "topic": "核对与阅读边界",
+      "kind": "boundary",
+      "detail": "Image-only scans require OCR before use in the text-PDF baseline.",
+      "explanation": "图片里的文字需要先识别出来才能分析。",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0004b00040",
+          "quote": "Image-only scans require OCR before use in the text-PDF baseline.",
+          "page": 4,
+          "section": "**Limits and application boundary**",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    },
+    {
+      "id": "n0011",
+      "label": "末页内容进入分析覆盖记录",
+      "topic": "离线交付与阅读体验",
+      "kind": "result",
+      "detail": "TAIL_SENTINEL: The last page must be analyzed and included in the coverage report.",
+      "explanation": "即便关键内容在最后一页，也应该进入分析流程。",
+      "inference": false,
+      "evidence": [
+        {
+          "source_id": "p0004b00045",
+          "quote": "TAIL_SENTINEL: The last page must be analyzed and included in the coverage report.",
+          "page": 4,
+          "section": "**Limits and application boundary**",
+          "matched": true,
+          "status": "原文摘录匹配"
+        }
+      ],
+      "status": "anchored"
+    }
+  ],
+  "tree": {
+    "id": "root",
+    "label": "Page-aware document evidence — synthetic teaching example",
+    "children": [
+      {
+        "id": "t0",
+        "label": "来源与阅读流程",
+        "children": [
+          {
+            "id": "g0_0",
+            "label": "可追溯阅读的研究问题",
+            "children": [
+              {
+                "id": "n0001",
+                "label": "稳定来源能否穿过分块流程",
+                "topic": "可追溯阅读的研究问题",
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "g0_1",
+            "label": "来源优先的处理流程",
+            "children": [
+              {
+                "id": "n0002",
+                "label": "先保留来源，再组织结论",
+                "topic": "来源优先的处理流程",
+                "children": []
+              },
+              {
+                "id": "n0004",
+                "label": "段落绑定来源 ID 与页码",
+                "topic": "来源优先的处理流程",
+                "children": []
+              },
+              {
+                "id": "n0006",
+                "label": "先提取，再分析，最后合并",
+                "topic": "来源优先的处理流程",
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "g0_2",
+            "label": "离线交付与阅读体验",
+            "children": [
+              {
+                "id": "n0003",
+                "label": "导图与证据打包在单个看板",
+                "topic": "离线交付与阅读体验",
+                "children": []
+              },
+              {
+                "id": "n0008",
+                "label": "分析分块留有覆盖记录",
+                "topic": "离线交付与阅读体验",
+                "children": []
+              },
+              {
+                "id": "n0011",
+                "label": "末页内容进入分析覆盖记录",
+                "topic": "离线交付与阅读体验",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "t1",
+        "label": "核对与阅读边界",
+        "children": [
+          {
+            "id": "g0_3",
+            "label": "核对与阅读边界",
+            "children": [
+              {
+                "id": "n0005",
+                "label": "原文匹配不等于结论成立",
+                "topic": "核对与阅读边界",
+                "children": []
+              },
+              {
+                "id": "n0007",
+                "label": "测试响应不能代表模型质量",
+                "topic": "核对与阅读边界",
+                "children": []
+              },
+              {
+                "id": "n0009",
+                "label": "教学文本不能替代真实论文验证",
+                "topic": "核对与阅读边界",
+                "children": []
+              },
+              {
+                "id": "n0010",
+                "label": "扫描论文需要先执行 OCR",
+                "topic": "核对与阅读边界",
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "coverage": {
+    "pages_total": 4,
+    "pages_with_text": 4,
+    "chunks_total": 3,
+    "chunks_analyzed": 3,
+    "sources_total": 46,
+    "sources_analyzed": 46,
+    "deduplicated": 0
+  },
+  "warnings": [],
+  "model_info": {
+    "source": "fixture",
+    "model": "本地确定性测试响应（非真实模型）",
+    "calls": 5,
+    "tokens": {
+      "input": 0,
+      "output": 0
+    },
+    "json_repairs": 0
+  },
+  "pdf_base64": "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wkjMeBgQDG7mNENms7+JYsYdxqMhn2Wpi1mdYlNbETNucTs8UO0V+wJc2fZtGMhwc5S+bL4kbP3fc+OVFrkwNgzPfWm8Jnji9+fAfBIcl0tZrxSiCJUrH5wJCrvmDU81v6Rw08/YmT6+sn0tMGrD7xZwqzvraIuiL13Htz+CcuMrQ+HHdTBFYGJTdNR2S44ZDS5ft+n79A+6yCa/CmVuZHN0cmVhbQplbmRvYmoKCjI0IDAgb2JqCjw8L0xlbmd0aCAxMTEvRmlsdGVyL0ZsYXRlRGVjb2RlPj4Kc3RyZWFtCnjaFYsxDsJADAR7v8I/wOez13cSoohEQxfJXUSZiAIKGt6Po21WMxr60pLUWGqNbXAXzg9dXvv7x5Pz4O3qghYCD/WA1wdcJXpM7GEYZQwTvZidHr1YOYQKgBkjLKo+Kz1Uut2e+aB70kp/9hcbzQplbmRzdHJlYW0KZW5kb2JqCgoyNSAwIG9iago8PC9UaXRsZTxGRUZGMDA1MDAwNjEwMDY3MDA2NTAwMkQwMDYxMDA3NzAwNjEwMDcyMDA2NTAwMjAwMDY0MDA2RjAwNjMwMDc1MDA2RDAwNjUwMDZFMDA3NDAwMjAwMDY1MDA3NjAwNjkwMDY0MDA2NTAwNkUwMDYzMDA2NTAwMjAyMDE0MDAyMDAwNzMwMDc5MDA2RTAwNzQwMDY4MDA2NTAwNzQwMDY5MDA2MzAwMjAwMDc0MDA2NTAwNjEwMDYzMDA2ODAwNjkwMDZFMDA2NzAwMjAwMDY1MDA3ODAwNjEwMDZEMDA3MDAwNkMwMDY1Pi9BdXRob3IoUGFwZXJXZWF2ZSB0ZWFjaGluZyBmaXh0dXJlKT4+CmVuZG9iagoKeHJlZgowIDI2CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDA0MiAwMDAwMCBuIAowMDAwMDAwMTIwIDAwMDAwIG4gCjAwMDAwMDAxOTMgMDAwMDAgbiAKMDAwMDAwMDI0NSAwMDAwMCBuIAowMDAwMDAwMzY0IDAwMDAwIG4gCjAwMDAwMDA0NTggMDAwMDAgbiAKMDAwMDAwMDYyMyAwMDAwMCBuIAowMDAwMDAwNzEyIDAwMDAwIG4gCjAwMDAwMDE0MTQgMDAwMDAgbiAKMDAwMDAwMTU5NCAwMDAwMCBuIAowMDAwMDAxNjQ3IDAwMDAwIG4gCjAwMDAwMDE3NzEgMDAwMDAgbiAKMDAwMDAwMTk0NyAwMDAwMCBuIAowMDAwMDAyNTE4IDAwMDAwIG4gCjAwMDAwMDI2OTkgMDAwMDAgbiAKMDAwMDAwMjc1MiAwMDAwMCBuIAowMDAwMDAyODc2IDAwMDAwIG4gCjAwMDAwMDMwMzggMDAwMDAgbiAKMDAwMDAwMzU1OCAwMDAwMCBuIAowMDAwMDAzNzM5IDAwMDAwIG4gCjAwMDAwMDM3OTIgMDAwMDAgbiAKMDAwMDAwMzkxNiAwMDAwMCBuIAowMDAwMDA0MDg5IDAwMDAwIG4gCjAwMDAwMDQ2NzUgMDAwMDAgbiAKMDAwMDAwNDg1NiAwMDAwMCBuIAoKdHJhaWxlcgo8PC9TaXplIDI2L0luZm8gMjUgMCBSL1Jvb3QgMSAwIFIvSURbPDMxQzNCRTNBQzM4QTRDQzI4ODExMDA2RTIxQzNBNzI1PjwyNzFFRDhBRUFEQUZCMTJGQ0U0QkRBMUVBRTRGODI4MD5dPj4Kc3RhcnR4cmVmCjUxNTQKJSVFT0YK",
+  "mermaid": {
+    "mindmap": "mindmap\n    root((\"Page-aware document evidence synthetic teaching example\"))\n        t0[\"来源与阅读流程\"]\n            g0_0[\"可追溯阅读的研究问题\"]\n                n0001[\"稳定来源能否穿过分块流程\"]\n            g0_1[\"来源优先的处理流程\"]\n                n0002[\"先保留来源，再组织结论\"]\n                n0004[\"段落绑定来源 ID 与页码\"]\n                n0006[\"先提取，再分析，最后合并\"]\n            g0_2[\"离线交付与阅读体验\"]\n                n0003[\"导图与证据打包在单个看板\"]\n                n0008[\"分析分块留有覆盖记录\"]\n                n0011[\"末页内容进入分析覆盖记录\"]\n        t1[\"核对与阅读边界\"]\n            g0_3[\"核对与阅读边界\"]\n                n0005[\"原文匹配不等于结论成立\"]\n                n0007[\"测试响应不能代表模型质量\"]\n                n0009[\"教学文本不能替代真实论文验证\"]\n                n0010[\"扫描论文需要先执行 OCR\"]",
+    "flowchart": "flowchart LR\nroot[\"Page-aware document evidence synthetic teaching example\"]\nt0[\"来源与阅读流程\"]\ng0_0[\"可追溯阅读的研究问题\"]\nn0001[\"稳定来源能否穿过分块流程\"]\ng0_0 --> n0001\nt0 --> g0_0\ng0_1[\"来源优先的处理流程\"]\nn0002[\"先保留来源，再组织结论\"]\ng0_1 --> n0002\nn0004[\"段落绑定来源 ID 与页码\"]\ng0_1 --> n0004\nn0006[\"先提取，再分析，最后合并\"]\ng0_1 --> n0006\nt0 --> g0_1\ng0_2[\"离线交付与阅读体验\"]\nn0003[\"导图与证据打包在单个看板\"]\ng0_2 --> n0003\nn0008[\"分析分块留有覆盖记录\"]\ng0_2 --> n0008\nn0011[\"末页内容进入分析覆盖记录\"]\ng0_2 --> n0011\nt0 --> g0_2\nroot --> t0\nt1[\"核对与阅读边界\"]\ng0_3[\"核对与阅读边界\"]\nn0005[\"原文匹配不等于结论成立\"]\ng0_3 --> n0005\nn0007[\"测试响应不能代表模型质量\"]\ng0_3 --> n0007\nn0009[\"教学文本不能替代真实论文验证\"]\ng0_3 --> n0009\nn0010[\"扫描论文需要先执行 OCR\"]\ng0_3 --> n0010\nt1 --> g0_3\nroot --> t1"
+  },
+  "validation": {
+    "parser": "Mermaid 11.12.0 / Chromium",
+    "mindmap": true,
+    "flowchart": true,
+    "rule_repair": false
+  }
+}

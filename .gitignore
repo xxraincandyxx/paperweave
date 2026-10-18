@@ -1,0 +1,12 @@
+.env
+.venv/
+node_modules/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+outputs/runs/
+.test-tmp/
+
+# Local model credentials must never enter version control.
+.env.*
+!.env.example

@@ -1,0 +1,13 @@
+{
+  "pymupdf4llm": "1.28.2",
+  "pymupdf": "1.28.2",
+  "pymupdf_layout": "1.28.2",
+  "fastapi": "0.144.0",
+  "starlette": "1.8.0",
+  "uvicorn": "0.54.0",
+  "python-multipart": "0.0.32",
+  "httpx": "0.28.1",
+  "python-dotenv": "1.2.4",
+  "playwright": "1.64.0",
+  "pytest": "9.1.1"
+}
