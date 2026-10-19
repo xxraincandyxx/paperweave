@@ -123,7 +123,9 @@ HTML 与 JSON 默认内嵌 PDF，文件会相应变大；不需要内嵌原件�
 .\.venv\Scripts\python.exe -m pytest -q --basetemp .test-tmp
 ```
 
-测试包括：全文块无截断、分层合并无漏节点、伪造引文标记、相反结论不合并、API JSON 修复与密钥脱敏、加密/扫描件错误处理、本地 HTTP 端到端、末页内容进入导图、离线 HTML 交互与导出、移动端、跨站请求阻断。实测结果见 `outputs/test-results.xml` 和 `docs/测试与验收记录.md`。
+测试包括：全文块无截断、分层合并无漏节点、伪造引文标记、相反结论不合并、API JSON 修复与密钥脱敏、加密/扫描件错误处理、本地 HTTP 端到端、末页内容进入导图、离线 HTML 交互与导出、移动端、跨站请求阻断、浏览器级上传流程。实测结果见 `outputs/test-results.xml` 和 `docs/测试与验收记录.md`。
+
+无需真实密钥即可联调完整界面流程：运行 `python scripts/mock_llm.py` 启动确定性模拟 Chat Completions 接口，把 `.env` 的 `LLM_BASE_URL` 指向 `http://127.0.0.1:8902/v1`，再执行 `serve`，即可在浏览器中走通「上传 → 分析 → 看板」。`tests/test_upload_flow.py` 在 pytest 内自动执行同一流程；模拟响应来自教学规则，不代表真实模型质量。
 
 另外用公开的《Attention Is All You Need》15 页 PDF 检查真实双栏解析，254 个来源片段全部分配到 7 个块。**仅测试提取与分块，未调用真实模型**；第 14 页文字不足的警告保留在 `outputs/real-pdf-smoke.json`。
 
