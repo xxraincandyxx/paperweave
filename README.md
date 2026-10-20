@@ -152,3 +152,13 @@ HTML 与 JSON 默认内嵌 PDF，文件会相应变大；不需要内嵌原件�
 ## 开源与复用
 
 本项目新增代码按 AGPL-3.0-or-later 发布，以明确适配所使用的 PyMuPDF / PyMuPDF4LLM 开源依赖。MIT 上游版权与授权声明保留在 `licenses/`；具体模块、上游 commit、改造内容与第三方 JS 授权见 `THIRD_PARTY_NOTICES.md` 和 `licenses/`。本地开发依赖不会打进参赛压缩包，已构建的离线 Mermaid 资源会随源码提交。
+
+## 页面视觉规范
+
+PaperWeave 当前采用 Scientific Editorial × Swiss Modernism：科研编辑式排版、克制的中性色、页码/引用标记、统一文字层级与 8px 间距。首页与导出的离线看板使用同一套样式，没有增加前端依赖。
+
+- 首页：开放式双栏排版，减少嵌套卡片和装饰性边框；说明流程以连续文本组织。
+- 看板：中性导图配色、研究索引与原文引注；保留搜索、证据定位、双图、深色模式及原有导出格式。
+- 操作：可见键盘焦点、导图节点 Enter/空格激活、方向键平移、加减键缩放、0 键适应，以及正确的筛选状态和进度提示。
+
+后续 UI 修改遵守根目录 `AGENTS.md`。实际 1440px / 390px 截图在 `outputs/`：`upload-preview.png`、`upload-mobile-preview.png`、`dashboard-preview.png`、`mobile-preview.png`。

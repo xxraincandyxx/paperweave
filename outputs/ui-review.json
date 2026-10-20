@@ -1,0 +1,26 @@
+[
+  {
+    "page": "upload",
+    "width": 1440,
+    "horizontal_overflow": false,
+    "page_errors": []
+  },
+  {
+    "page": "offline dashboard",
+    "width": 1440,
+    "horizontal_overflow": false,
+    "page_errors": []
+  },
+  {
+    "page": "upload",
+    "width": 390,
+    "horizontal_overflow": false,
+    "page_errors": []
+  },
+  {
+    "page": "offline dashboard",
+    "width": 390,
+    "horizontal_overflow": false,
+    "page_errors": []
+  }
+]

@@ -10,7 +10,7 @@ def test_offline_interactions_and_exports(tmp_path):
     with sync_playwright() as p:
         browser=browser_launch(p)
         try:
-            context=browser.new_context(viewport={'width':1550,'height':1080},accept_downloads=True)
+            context=browser.new_context(viewport={'width':1440,'height':1000},accept_downloads=True)
             context.set_offline(True)
             page=context.new_page();errors=[];remote=[]
             page.on('pageerror',lambda e:errors.append(str(e)))

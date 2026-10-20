@@ -29,7 +29,7 @@ def compile_and_validate(tree):
             page.route('**/*',lambda route:route.abort())
             page.set_content('<html><body><main id="diagram"></main></body></html>')
             page.add_script_tag(path=str(STATIC/'mermaid.bundle.js'))
-            page.evaluate("""() => window.PaperMermaid.initialize({startOnLoad:false,securityLevel:'strict',theme:'base',maxTextSize:2000000,maxEdges:20000,themeVariables:{fontFamily:'Georgia, Microsoft YaHei, serif',primaryColor:'#edf5ef',primaryTextColor:'#1b332d',primaryBorderColor:'#6f9887',lineColor:'#a6b6ae'}})""")
+            page.evaluate("""() => window.PaperMermaid.initialize({startOnLoad:false,securityLevel:'strict',theme:'base',maxTextSize:2000000,maxEdges:20000,themeVariables:{fontFamily:'Cambria, Noto Serif SC, SimSun, serif',fontSize:'15px',primaryColor:'#eef2fe',primaryTextColor:'#13233f',primaryBorderColor:'#b4c1dc',lineColor:'#9ba6b9',secondaryColor:'#f0f2f6',tertiaryColor:'#f6f7f9',cScale0:'#e8edfd',cScaleLabel0:'#13233f',cScale1:'#edf1f7',cScaleLabel1:'#13233f',cScale2:'#f0f2f6',cScaleLabel2:'#13233f',cScale3:'#f5f6f8',cScaleLabel3:'#13233f',cScale4:'#e8edf5',cScaleLabel4:'#13233f',cScale5:'#eff2f7',cScaleLabel5:'#13233f',cScale6:'#e8edfd',cScaleLabel6:'#13233f',cScale7:'#edf1f7',cScaleLabel7:'#13233f',cScale8:'#f0f2f6',cScaleLabel8:'#13233f',cScale9:'#f5f6f8',cScaleLabel9:'#13233f',cScale10:'#e8edf5',cScaleLabel10:'#13233f',cScale11:'#eff2f7',cScaleLabel11:'#13233f'}})""")
             for mode,code in codes.items():
                 result=page.evaluate("""async code=>{try{await PaperMermaid.parse(code);return {ok:true}}catch(e){return {ok:false,error:String(e)}}}""",code)
                 if not result['ok']:
