@@ -1,0 +1,11 @@
+# LaTeX 编译产物（可再生）
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.xdv
+page-*.png
+.DS_Store
