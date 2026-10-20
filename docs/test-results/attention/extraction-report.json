@@ -1,0 +1,290 @@
+{
+  "paper": "Attention Is All You Need",
+  "source_url": "https://arxiv.org/pdf/1706.03762v7",
+  "arxiv_version": "v7",
+  "sha256": "bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697",
+  "pdf_bytes": 2215244,
+  "extraction_seconds": 2.63,
+  "pages_total": 15,
+  "pages_with_text": 15,
+  "extracted_characters": 41878,
+  "sources_total": 254,
+  "chunks_planned": 7,
+  "sources_assigned_once": true,
+  "last_page_included": 15,
+  "pages": [
+    {
+      "page": 1,
+      "characters": 3095,
+      "source_blocks": 28
+    },
+    {
+      "page": 2,
+      "characters": 4339,
+      "source_blocks": 15
+    },
+    {
+      "page": 3,
+      "characters": 1885,
+      "source_blocks": 8
+    },
+    {
+      "page": 4,
+      "characters": 2798,
+      "source_blocks": 15
+    },
+    {
+      "page": 5,
+      "characters": 3941,
+      "source_blocks": 26
+    },
+    {
+      "page": 6,
+      "characters": 3822,
+      "source_blocks": 16
+    },
+    {
+      "page": 7,
+      "characters": 3769,
+      "source_blocks": 17
+    },
+    {
+      "page": 8,
+      "characters": 3826,
+      "source_blocks": 24
+    },
+    {
+      "page": 9,
+      "characters": 3318,
+      "source_blocks": 11
+    },
+    {
+      "page": 10,
+      "characters": 3433,
+      "source_blocks": 21
+    },
+    {
+      "page": 11,
+      "characters": 3657,
+      "source_blocks": 35
+    },
+    {
+      "page": 12,
+      "characters": 3491,
+      "source_blocks": 33
+    },
+    {
+      "page": 13,
+      "characters": 382,
+      "source_blocks": 2
+    },
+    {
+      "page": 14,
+      "characters": 2,
+      "source_blocks": 1
+    },
+    {
+      "page": 15,
+      "characters": 75,
+      "source_blocks": 2
+    }
+  ],
+  "key_content_found": {
+    "transformer": {
+      "needle": "Transformer",
+      "pages": [
+        1,
+        2,
+        3,
+        5,
+        8,
+        9,
+        10
+      ],
+      "source_ids": [
+        "p0001b00024",
+        "p0001b00025",
+        "p0002b00033",
+        "p0002b00036",
+        "p0002b00039",
+        "p0003b00044",
+        "p0003b00045",
+        "p0005b00080",
+        "p0008b00126",
+        "p0008b00136",
+        "p0008b00137",
+        "p0008b00142",
+        "p0008b00143",
+        "p0008b00147",
+        "p0009b00150",
+        "p0009b00156",
+        "p0009b00157",
+        "p0010b00161",
+        "p0010b00162",
+        "p0010b00165",
+        "p0010b00167",
+        "p0010b00168",
+        "p0010b00169"
+      ]
+    },
+    "scaled_dot_product": {
+      "needle": "Scaled Dot-Product",
+      "pages": [
+        1,
+        4,
+        5
+      ],
+      "source_ids": [
+        "p0001b00025",
+        "p0004b00052",
+        "p0004b00053",
+        "p0004b00055",
+        "p0004b00056",
+        "p0005b00084"
+      ]
+    },
+    "multi_head": {
+      "needle": "Multi-Head Attention",
+      "pages": [
+        2,
+        4,
+        5
+      ],
+      "source_ids": [
+        "p0002b00036",
+        "p0004b00052",
+        "p0004b00053",
+        "p0004b00063",
+        "p0005b00068",
+        "p0005b00080"
+      ]
+    },
+    "positional_encoding": {
+      "needle": "Positional Encoding",
+      "pages": [
+        6,
+        8,
+        9
+      ],
+      "source_ids": [
+        "p0006b00095",
+        "p0006b00096",
+        "p0006b00100",
+        "p0008b00138",
+        "p0009b00154"
+      ]
+    },
+    "english_german_score": {
+      "needle": "28.4",
+      "pages": [
+        1,
+        8
+      ],
+      "source_ids": [
+        "p0001b00024",
+        "p0008b00137"
+      ]
+    },
+    "english_french_abstract_table_score": {
+      "needle": "41.8",
+      "pages": [
+        1,
+        8
+      ],
+      "source_ids": [
+        "p0001b00024",
+        "p0008b00137"
+      ]
+    },
+    "english_french_body_score": {
+      "needle": "41.0",
+      "pages": [],
+      "source_ids": []
+    },
+    "training_days": {
+      "needle": "3.5 days",
+      "pages": [
+        1,
+        7
+      ],
+      "source_ids": [
+        "p0001b00024",
+        "p0007b00118"
+      ]
+    },
+    "conclusion": {
+      "needle": "Conclusion",
+      "pages": [
+        10
+      ],
+      "source_ids": [
+        "p0010b00166"
+      ]
+    },
+    "appendix_attention_visualizations": {
+      "needle": "Attention Visualizations",
+      "pages": [],
+      "source_ids": []
+    }
+  },
+  "visual_page_audit": [
+    {
+      "page": 1,
+      "extracted_characters": 3095,
+      "images": 0,
+      "drawing_paths": 3
+    },
+    {
+      "page": 3,
+      "extracted_characters": 1885,
+      "images": 1,
+      "drawing_paths": 0
+    },
+    {
+      "page": 4,
+      "extracted_characters": 2798,
+      "images": 2,
+      "drawing_paths": 8
+    },
+    {
+      "page": 8,
+      "extracted_characters": 3826,
+      "images": 0,
+      "drawing_paths": 8
+    },
+    {
+      "page": 9,
+      "extracted_characters": 3318,
+      "images": 0,
+      "drawing_paths": 53
+    },
+    {
+      "page": 10,
+      "extracted_characters": 3433,
+      "images": 0,
+      "drawing_paths": 33
+    },
+    {
+      "page": 14,
+      "extracted_characters": 2,
+      "images": 0,
+      "drawing_paths": 1030
+    },
+    {
+      "page": 15,
+      "extracted_characters": 75,
+      "images": 0,
+      "drawing_paths": 947
+    }
+  ],
+  "warnings": [
+    "第 14 页可提取文字不足，可能为扫描页或空白页；未自动执行 OCR。"
+  ],
+  "config_present": {
+    "base_url": false,
+    "api_key": false,
+    "model": false
+  },
+  "real_model_calls": 0,
+  "scope": "real PDF extraction and complete source assignment; no model analysis has run"
+}

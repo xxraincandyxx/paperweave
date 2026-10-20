@@ -1,0 +1,44 @@
+{
+  "source": "isolated local deterministic teaching API",
+  "real_external_model_calls": 0,
+  "steps": [
+    "Open upload page; teaching model visibly labelled",
+    "Choose PDF; filename appears",
+    "Submit; actual job progress appears",
+    "Job completes and result link appears",
+    "Open result with teaching banner and eleven nodes",
+    "Search last-page finding and select it",
+    "Click evidence page and inspect page-four extracted text",
+    "Switch evidence dialog to embedded original PDF",
+    "Switch to structure view",
+    "Filter limitations and boundaries",
+    "Expand/collapse and switch to dark mode",
+    "Stop both servers; reopen downloaded HTML offline and verify search/evidence"
+  ],
+  "page_errors": [],
+  "offline_http_requests": [],
+  "downloads": [
+    {
+      "button": "export-mmd",
+      "filename": "mindmap.mmd",
+      "bytes": 1004
+    },
+    {
+      "button": "export-svg",
+      "filename": "paper-mindmap.svg",
+      "bytes": 37919
+    },
+    {
+      "button": "export-json",
+      "filename": "analysis.json",
+      "bytes": 32267
+    },
+    {
+      "button": "download-html",
+      "filename": "paperweave.html",
+      "bytes": 2827690
+    }
+  ],
+  "local_api_calls": 5,
+  "offline_reopen": true
+}

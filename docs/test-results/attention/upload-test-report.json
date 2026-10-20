@@ -1,0 +1,9 @@
+{
+  "paper_file_selection": "passed",
+  "missing_model_configuration": "correctly_blocked",
+  "retry_button_enabled": true,
+  "fabricated_dashboard_link": false,
+  "page_errors": [],
+  "real_model_calls": 0,
+  "completed_analysis": false
+}
