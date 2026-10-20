@@ -6,6 +6,12 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\floatname{algorithm}{算法}
+\renewcommand{\algorithmicrequire}{\textbf{输入：}}
+\renewcommand{\algorithmicensure}{\textbf{输出：}}
 \graphicspath{{shots/}}
 
 % 放宽浮动体参数，避免图表被挤到文末孤立成页
@@ -20,24 +26,23 @@
 \setlength{\bibsep}{2pt}
 
 \title{研脉 PaperWeave：从论文 PDF 到证据溯源思维导图的本地一键转换系统\\
-{\large 技术报告与界面测试评估}}
+{\large 技术报告}}
 
-\author{xxraincandyxx \\
-  南京邮电大学 \\
-  \texttt{xxraincandyxx@gmail.com}}
+\author{奖金大盗（队伍） \\
+  南京邮电大学}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-学术论文篇幅长、结构复杂、术语密集，读者难以快速把握研究主题、论证路径与局限。本文报告研脉（PaperWeave）系统的设计与实现：该系统将文本型学术论文 PDF 一键转换为带证据溯源的 Mermaid 思维导图与可离线打开的交互式 HTML 看板，覆盖\textbf{页级解析、来源分块、大模型结构化分析、证据核验、主题合并、导图校验与单文件导出}七个阶段。系统以归一化摘录匹配支撑证据回溯，以完整性校验防止节点静默丢失，以内容安全策略与回环服务界定安全边界，并在真实 Chromium 内核中验证 Mermaid 语法后内嵌全部渲染资源，保证看板断网可用。我们执行 16 项自动化测试并对 12 个关键界面功能逐一进行浏览器级测试，全部通过；对陌生双栏论文（15 页、254 个来源片段）实现无损分块覆盖，看板离线加载的外部请求为 0。对照“文档解析智能体设计大赛”评审维度，基础部分全部达成，提高部分大部分达成；科学分析质量有待真实模型接入后的现场验收。
+学术论文篇幅长、结构复杂、术语密集，读者难以快速把握研究主题、论证路径与局限。本文报告研脉（PaperWeave）系统的设计与实现：该系统将文本型学术论文 PDF 一键转换为带证据溯源的 Mermaid 思维导图与可离线打开的交互式 HTML 看板。我们将任务形式化为覆盖式分块分析问题，给出来源块、证据核验谓词、主题树完整性等不变式，并以三个算法描述从解析、逐块分析到分层归纳的完整流程。系统的核心取向是把“模型会出错”作为设计前提：证据只证明引文存在而不证明结论成立；全文穷尽覆盖而不提前终止；任何完整性破坏都转化为显式错误而非静默缺陷。我们执行 16 项自动化测试并对 12 个关键界面功能逐一进行浏览器级测试，全部通过；对陌生双栏论文（15 页、254 个来源块）实现无损分块覆盖，看板离线加载的外部请求为 0。对照“文档解析智能体设计大赛”评审维度，基础部分全部达成，提高部分大部分达成；科学分析质量有待真实模型接入后的现场验收。
 \end{abstract}
 
 \section{引言}
 
 阅读学术论文的核心困难不在于单句理解，而在于把握全文结构：研究问题是什么、论证如何展开、贡献与局限分别在哪里。大语言模型为自动结构化分析提供了可能，但直接调用模型存在三类风险：模型可能编造原文不存在的内容；分析往往只覆盖前几页而遗漏末页证据；生成的导图依赖在线服务，不可归档、不可离线分享。
 
-“文档解析智能体设计大赛”将上述问题形式化为一条自动化流水线：PDF 输入 $\rightarrow$ 文本提取 $\rightarrow$ 论文结构分析 $\rightarrow$ Mermaid 导图生成 $\rightarrow$ 交互式 HTML 看板输出，并要求全程一键完成、不依赖外部 CDN、分析结果可回溯。本文报告我们按该要求实现的研脉系统，重点包括：（1）以来源块为单位、以证据核验为中心的流水线设计\;\S\ref{sec:design}；（2）覆盖提示注入与本机服务的威胁模型\;\S\ref{sec:security}；（3）16 项自动化测试与 12 项界面功能的实测结果\;\S\ref{sec:test}。
+“文档解析智能体设计大赛”将上述问题形式化为一条自动化流水线：PDF 输入 $\rightarrow$ 文本提取 $\rightarrow$ 论文结构分析 $\rightarrow$ Mermaid 导图生成 $\rightarrow$ 交互式 HTML 看板输出，并要求全程一键完成、不依赖外部内容分发网络、分析结果可回溯。本文报告我们按该要求实现的研脉系统，贡献包括：（1）任务的严格形式化与四条系统不变式（\S\ref{sec:formal}）；（2）以证据核验为中心、可抵御提示注入的流水线设计（\S\ref{sec:design}）；（3）覆盖解析、分析与归纳全过程的三个算法（算法~\ref{alg:chunk}--\ref{alg:org2}）；（4）16 项自动化测试与 12 项界面功能的实测结果（\S\ref{sec:test}）。
 
 \begin{figure*}[t]
 \centering
@@ -46,9 +51,9 @@
 \fbox{\small 逐块结构化分析} $\rightarrow$
 \fbox{\small 证据核验与合并}\\[4pt]
 \fbox{\small 主题归纳} $\rightarrow$
-\fbox{\small Mermaid 校验} $\rightarrow$
+\fbox{\small 导图校验} $\rightarrow$
 \fbox{\small 单文件离线看板}
-\caption{研脉处理流水线。除大模型分析阶段外全部本地执行；分析阶段按块依次调用 Chat Completions 兼容接口，配置经 \texttt{.env} 或环境变量注入。}
+\caption{研脉处理流水线。除大模型分析阶段外全部本地执行；分析阶段按块依次调用对话式补全兼容接口，模型身份与访问凭据经配置注入，不写入源码。}
 \label{fig:pipeline}
 \end{figure*}
 
@@ -60,38 +65,197 @@
 \label{fig:upload}
 \end{figure*}
 
+\section{问题形式化}\label{sec:formal}
+
+\subsection{任务定义}
+
+给定文档 $D$，其物理页序列为 $p_1,\dots,p_n$，第 $i$ 页的可提取文本记为 $t_i$。解析层将全文切分为\textbf{来源块}集合
+$S=\{s_1,\dots,s_m\}$，每个来源块 $s$ 为四元组
+$\bigl(\mathrm{id}(s),\,\pi(s),\,\sigma(s),\,x_s\bigr)$，
+分别表示稳定标识、物理页码、所属章节与块文本，且块长满足 $|x_s|\le L$（本文取 $L=1200$ 字符）。来源块按阅读顺序贪心装箱为\textbf{分析块}划分 $\mathcal{C}=\{C_1,\dots,C_k\}$，要求每块负载（编码后长度）之和不超过预算 $B$。
+
+分析器 $\mathcal{A}$（大模型）将每个分析块映射为\textbf{发现}集合：每条发现
+$f=(\ell,\theta,\kappa,d,e,\iota,E_f)$
+包含短标签 $\ell$、内容主题 $\theta$、类别 $\kappa\in K$（$|K|=9$，见表~\ref{tab:kinds}）、详细分析 $d$、读者友好解释 $e$、推断标记 $\iota\in\{0,1\}$ 与证据集 $E_f\subseteq S\times\Sigma^{*}$，其中每条证据为（来源块，逐字摘录）对。
+
+系统的最终输出为三元组 $(T,\;M,\;H)$：主题树 $T$（叶节点与合并后的发现一一对应，内部节点为归纳出的内容主题）；两个语义等价的导图程序 $M$（思维导图与结构关系图两种图类型）；以及自包含看板文档 $H$——其资源闭包完全内嵌于自身，对网络的依赖为空。
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.26\linewidth}p{0.62\linewidth}@{}}
+\toprule
+\textbf{类别 $\kappa$} & \textbf{判定标准} \\
+\midrule
+研究背景 & 领域现状与已有工作动机 \\
+核心问题 & 论文要回答的科学问题 \\
+关键概念 & 理解全文必需的术语或对象 \\
+研究方法 & 数据、模型与实验设计 \\
+论证路径 & 从问题到结论的推理链条 \\
+实验与结论 & 主要结果与数值发现 \\
+关键贡献 & 区别于已有工作的增量 \\
+局限 & 作者明示的不足 \\
+应用边界 & 结论适用的条件与范围 \\
+\bottomrule
+\end{tabular}
+\caption{发现记录的九类类别体系 $K$。}
+\label{tab:kinds}
+\end{table}
+
+\subsection{核验谓词与不变式}
+
+记规范化算子 $N(u)$ 为：Unicode NFKC 规范化、去除全部空白、转小写。对发现 $f$ 与其所在分析块 $C$，定义核验谓词
+\begin{equation}
+\begin{split}
+\mathrm{sat}(f,C)\iff{} & \forall(s,q)\in E_f:\ s\in C\\
+ & \wedge\, |N(q)|\ge 8 \wedge\, N(q)\sqsubseteq N(x_s)
+\end{split}
+\label{eq:sat}
+\end{equation}
+其中 $\sqsubseteq$ 表示子串关系。换言之，每条证据的摘录必须逐字（规范化意义下）出现于其声称的来源块中，且不得跨块引用。
+
+系统正确性由四条不变式约束。\textbf{I1（覆盖完备）}：$\mathcal{C}$ 是 $S$ 的有序划分——无遗漏、无重复；\textbf{I2（证据局部）}：式~\eqref{eq:sat} 对每条发现成立；\textbf{I3（叶完整）}：主题树 $T$ 的叶集合与合并后的节点集合恰好相等；\textbf{I4（离线自洽）}：$H$ 不引用任何外部资源。任何一条不变式被违反时，系统终止并报告错误，而不是降级输出。
+
+\subsection{设计原则}
+
+四条原则贯穿设计。其一，\textbf{模型会出错是前提而非异常}：所有模型输出都视为待校验的候选，校验失败触发有界修复，修复失败触发显式终止。其二，\textbf{证据只证明引文存在，不证明结论成立}：摘录匹配与语义待核对在界面上并列呈现，与归因评估文献中“可追溯不等于真实”的结论一致\citep{rashkin2023measuring}。其三，\textbf{覆盖优先于捷径}：全部分析块依次处理，不因已发现足够主题而提前结束。其四，\textbf{本地优先}：除模型调用外一切计算发生在本机，产物可离线使用与存档。
+
 \section{相关工作}
 
-文档解析方面，PyMuPDF4LLM\citep{pymupdf4llm}提供面向大模型的页级 Markdown 抽取，保留标题层级与表格结构，是本系统解析层的依赖基础。检索增强生成\citep{lewis2020rag}确立了“先取证据、后作回答”的范式，但常见实现按相似度检索片段，天然只覆盖语料子集；研脉反其道而行，对全文做\textbf{穷尽式}分块分析，以覆盖率为先、以检索为辅（看板内搜索仅在已提取文本上进行）。归因评估研究指出，生成系统的可信度应以“内容可追溯到具体来源”度量\citep{rashkin2023measuring}；研脉的证据卡片（页码、章节、逐字摘录、匹配状态）即按此设计，并显式区分“摘录存在”与“语义成立”。导图生成方面，mindmap-generator\citep{mindmapgen}提供递归层级生成思路，ScholarFlow\citep{scholarflow}提供论文数据模型与章节识别；研脉对二者做改造复用（\S\ref{sec:modules}），并以离线渲染与证据核验补齐其缺失。
+文档解析方面，PyMuPDF4LLM\citep{pymupdf4llm}提供面向大模型的页级 Markdown 抽取，保留标题层级与表格结构，是本系统解析层的依赖基础。检索增强生成\citep{lewis2020rag}确立了“先取证据、后作回答”的范式，但常见实现按相似度检索片段，天然只覆盖语料子集；研脉反其道而行，对全文做\textbf{穷尽式}分块分析，以覆盖率为先、以检索为辅（看板内搜索仅在已提取文本上进行）。归因评估研究将可信度操作化为“内容可追溯到具体来源”\citep{rashkin2023measuring}，本系统的证据面板即按此设计。导图生成方面，mindmap-generator\citep{mindmapgen}提供递归层级生成思路，ScholarFlow\citep{scholarflow}提供论文数据模型与章节识别；研脉对二者做改造复用（\S\ref{sec:modules}），并以离线渲染与证据核验补齐其缺失。
 
 \section{系统设计}\label{sec:design}
 
-系统由 PyMuPDF4LLM 按物理页提取文本，复用 ScholarFlow 的数据模型与章节识别，改造 mindmap-generator 的递归导图生成方式，经 FastAPI\citep{fastapi}提供本地上传服务，并用 Playwright\citep{playwright}驱动真实浏览器完成渲染校验。图~\ref{fig:pipeline} 展示整体流程；新增逻辑约 620 行 Python，另有 177 行改造复用的 vendor 代码（表~\ref{tab:modules}）。
+系统由六个功能组件构成：解析、分析、协议、编排、渲染与服务组件（\S\ref{sec:modules}）。解析复用 PyMuPDF4LLM 与 ScholarFlow 的章节识别，导图生成改造自 mindmap-generator，服务层基于 FastAPI\citep{fastapi}，渲染校验由 Playwright\citep{playwright}驱动的真实浏览器完成。图~\ref{fig:pipeline} 展示整体流程。
 
 \subsection{文档解析与来源分块}
 
-解析阶段每页独立提取，异常页回退到 PyMuPDF 原生读取并给出阅读顺序警告；可提取文字不足的页面被标记为疑似扫描页，不静默跳过。论文标题在元数据缺失时按首页最大字号、水平走向与纵向位置启发式识别，避免将版权声明误认作标题。全文被切分为不超过 1200 字符的\textbf{来源块}，每个来源块携带物理页码、所属章节与稳定 ID（如 \texttt{p0003b0007}）。来源块按字符预算组成分析块，长度上限可配置，默认 10000 字符。
+解析阶段每页独立提取，异常页回退到备用读取路径并给出阅读顺序警告；可提取文字不足的页面被标记为疑似扫描页，不静默跳过。论文标题在元数据缺失时按首页最大字号、水平走向与纵向位置启发式识别，避免将版权声明误认作标题。来源块标识由页码与块序号复合而成，天然携带位置信息，可在看板中双向跳转。
 
-分块以两条不变式约束：每个来源块必须恰好进入一个分析块（无遗漏、无重复）；分析块内保留来源块的原始页码与章节。对 15 页双栏真实论文《Attention Is All You Need》\citep{vaswani2017attention}的核查显示，254 个来源片段全部恰好分配至 7 个分析块，末页（第 15 页）与文字稀疏的第 14 页均被显式记录而非丢弃。
+分块以不变式 I1 为硬约束：贪心装箱按阅读顺序进行，跨页不断段，段内超长才切分。对 15 页双栏真实论文《Attention Is All You Need》\citep{vaswani2017attention}的核查显示，254 个来源块全部恰好分配至 7 个分析块，末页（第 15 页）与文字稀疏的第 14 页均被显式记录而非丢弃。
 
-\subsection{结构化分析与证据核验}\label{sec:evidence}
+\subsection{结构化发现抽取}
 
-每个分析块单独请求模型。提示词要求返回固定结构的 JSON：发现列表，每项含节点名称、内容主题、九选一的类别标签（研究问题、方法、论证、贡献、结论、局限、边界、概念、背景）、详细分析、读者友好解释、推断标记与证据引用。系统提示将论文正文显式声明为“待分析数据而非指令”，用于抵御论文文本内嵌的提示注入，并禁止补编不存在的实验结果。
+每个分析块独立请求模型，提示词规定表~\ref{tab:kinds}的类别体系与统一的发现模式，并明确三点约束：只依据所给片段作答；不得把参考文献中的工作当作本文贡献；不存在的内容不得补写。系统提示另将论文正文声明为“待分析数据而非指令”，用于抵御论文文本内嵌的提示注入。
 
-返回结果经过三层校验：（i）JSON 结构与枚举合法性；（ii）证据 \texttt{source\_id} 必须属于当前分析块（而非全篇），防止跨块张冠李戴；（iii）摘录经 Unicode NFKC 与空白归一化后必须能在来源块原文中逐字找到。校验失败时将错误回传模型修复，至多两次；仍失败则终止并保留已提取内容。
+模型返回经算法~\ref{alg:chunk}的三层校验：结构合法性（字段齐全、类别属于 $K$、推断标记为布尔值）；证据局部性（每条证据的来源标识必须属于当前分析块，防范跨块张冠李戴）；摘录逐字性（式~\ref{eq:sat}）。校验失败时将错误回传模型修复，至多两次；仍失败则终止并保留已提取内容——失败被如实呈现，而非伪装成部分成功。
 
-该设计有两个值得强调的取向。其一，\textbf{证据只证明引文存在，不证明结论成立}：界面上“摘录匹配”与“语义待核对”始终并列显示（图~\ref{fig:evidence}），推断性节点单独标记，未匹配摘录保留醒目标记而不伪造通过——这与归因评估文献中“可追溯不等于真实”的结论一致\citep{rashkin2023measuring}。其二，\textbf{全文覆盖优先}：所有分析块依次处理，不因已发现足够主题而提前结束，从机制上避免“只读摘要”类工具丢失末页局限的问题。
+\begin{algorithm}[t]
+\caption{覆盖式分块分析}
+\label{alg:chunk}
+\begin{algorithmic}[1]
+\REQUIRE 来源块序列 $S$，预算 $B$，校验器 $\mathrm{sat}$
+\ENSURE 发现集合 $F$，覆盖报告 $R$
+\STATE $\mathcal{C}\leftarrow$ 按阅读顺序对 $S$ 贪心装箱（预算 $B$） \COMMENT{不变式 I1}
+\STATE $F\leftarrow\emptyset$，$R\leftarrow\emptyset$
+\FORALL{$C\in\mathcal{C}$（按序）}
+  \FOR{尝试次数 $\le 3$}
+    \STATE $y\leftarrow$ 模型（分析提示 $+$ $C$ 的来源块）
+    \IF{$y$ 结构合法 \AND $\forall f\in y:\ \mathrm{sat}(f,C)$}
+      \STATE $F\leftarrow F\cup y$；\textbf{break}
+    \ELSE
+      \STATE 将违规明细回传模型请求修复
+    \ENDIF
+  \ENDFOR
+  \IF{三次尝试均失败}
+    \STATE \textbf{终止}：报告错误并保留已完成部分
+  \ENDIF
+  \STATE $R\leftarrow R\cup\{(\,C$ 的标识集, 页码集, 发现数$)\}$ \COMMENT{覆盖率留痕}
+\ENDFOR
+\RETURN $F,\ R$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{证据核验与保守合并}
+
+合并阶段（算法~\ref{alg:org} 前半）执行保守去重：仅当两条发现的类别相同、推断标记相同、且详细分析的规范化文本一致（或标签相似度超过 $0.96$）时才合并，被合并者吸收对方的证据集。语义相反的结论因此永远不会被错误聚合。每条证据经式~\eqref{eq:sat} 逐条判定后携带三种状态之一：“摘录匹配”（存在且逐字）、“未匹配”（不存在，保留醒目标记）与推断标记；节点状态取证据集中的最弱者。匹配检查只回答“引文是否存在”，不回答“结论是否成立”——后者留给读者的上下文核对。
+
+\begin{algorithm}[t]
+\caption{证据核验与保守合并}
+\label{alg:org}
+\begin{algorithmic}[1]
+\REQUIRE 发现集合 $F$，来源块集合 $S$
+\ENSURE 节点集合 $N$
+\STATE $N\leftarrow\emptyset$
+\FORALL{$f\in F$（按序）}
+  \FORALL{$(s,q)\in E_f$}
+    \STATE 依式~\eqref{eq:sat} 判定该证据：匹配 / 未匹配
+  \ENDFOR
+  \IF{$\exists\,n\in N$：$\kappa(n)=\kappa(f)\ \wedge\ \iota(n)=\iota(f)\ \wedge\ N(d(n))=N(d(f))$}
+    \STATE $n$ 吸收 $f$ 的证据集 \COMMENT{保守去重}
+  \ELSE
+    \STATE $N\leftarrow N\cup\{\text{node}(f)\}$；状态取最弱证据
+  \ENDIF
+\ENDFOR
+\RETURN $N$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{分层归纳与完整性检查}
+\label{alg:org2}
+\begin{algorithmic}[1]
+\REQUIRE 节点集合 $N$，批容量 $24$，扇出上限 $8$
+\ENSURE 主题树 $T$
+\STATE $L\leftarrow N$ 的叶表示
+\WHILE{$|L|>8$}
+  \FOR{每个不超过 $24$ 个元素的批}
+    \STATE 请求模型归纳为 $2$ 至 $6$ 个主题
+    \STATE 校验：每个输入标识恰好出现一次，否则修复重试
+  \ENDFOR
+  \STATE $L\leftarrow$ 本轮全部主题节点
+\ENDWHILE
+\IF{$|L|>2$}
+  \STATE 末轮归纳为 $1$ 至 $6$ 个内容主题（同样校验）
+\ENDIF
+\STATE $T\leftarrow$ 根（子树为 $L$）
+\IF{$\mathrm{leaves}(T)\not\equiv N$}
+  \STATE \textbf{终止}：节点完整性破坏，拒绝导出 \COMMENT{不变式 I3}
+\ENDIF
+\RETURN $T$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{分层归纳与完整性}
+
+归纳阶段（算法~\ref{alg:org2}）将扁平的发现集合组织为内容主题树：每批不超过 24 个节点，请求模型按实际科学关系归入 2--6 个主题，不套用“背景—方法—结果”固定模板；每轮之后节点数按扇出上限 8 收缩，轮数为对数级。归纳的硬约束是“每个输入标识恰好出现一次”与最终叶完整性（不变式 I3）：任何节点在归纳中丢失都会触发导出终止。完整性断言把归纳环节的节点丢失从静默缺陷变为显式错误，这是对分层摘要类系统常见失败模式的结构性防御。
+
+\subsection{导图校验与离线看板}
+
+同一主题树生成思维导图与结构关系图两种 Mermaid 程序\citep{mermaid}，均先经官方解析器校验语法，再在真实浏览器内核中实际渲染为矢量图；标签含特殊符号导致解析失败时，按规则清洗标签后重试。看板为单文件 HTML：样式、交互脚本、渲染器、结构化数据与预渲染矢量图全部内嵌，可选内嵌原始 PDF，并由严格内容安全策略约束——除内联资源与数据地址外禁止一切加载与外联。不变式 I4 由自动化测试验证：离线模式下外部请求计数为 0。
+
+\subsection{本地服务与威胁模型}\label{sec:security}
+
+系统的威胁模型覆盖三类攻击者，表~\ref{tab:threat} 给出能力与防御的对应关系。核心思路是\textbf{最小信任面}：服务只绑定回环地址并校验请求来源头，阻断跨站请求与域名重绑定；结果文件按白名单路由，杜绝路径穿越；凭据仅经环境注入，不写入源码、日志与任何导出物；认证失败的响应正文不落盘。
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{0.30\linewidth}p{0.60\linewidth}@{}}
+\toprule
+\textbf{攻击者能力} & \textbf{防御} \\
+\midrule
+A1：构造论文内容，内嵌指令操纵模型 & 系统提示声明正文为数据；输出仅按固定模式解析；自由文本不进入执行路径 \\
+A2：本机网络对等端或恶意网页 & 仅绑定回环；来源与主机头校验；并发与容量限额；文件白名单 \\
+A3：接触产物与日志的本地用户 & 凭据不落盘；认证失败正文不落盘；产物可整体删除 \\
+\bottomrule
+\end{tabular}
+\caption{威胁模型：攻击者能力与对应防御。}
+\label{tab:threat}
+\end{table}
+
+\subsection{交互设计}
+
+看板交互围绕“证据优先的渐进披露”组织（图~\ref{fig:overview}）。三栏布局对应三个阅读层次：左栏\textbf{研究索引}是全文的目录化视图，支持关键词搜索与“局限/边界”筛选；中栏\textbf{思维导图}与\textbf{结构关系图}可切换，前者呈现主题聚合、后者呈现严格层级（图~\ref{fig:views}），支持拖拽、缩放与主题收起展开；右栏\textbf{阅读笔记}展示选中节点的类别、详细分析、通俗解释与证据卡片，卡片上的页码按钮跳转到原文并高亮命中摘录。搜索时导图中不相关节点降低不透明度，实现索引与图的空间联动（图~\ref{fig:filter}）。看板另提供 HTML、矢量图、导图源码与分析数据四种导出、深浅主题与移动端单列布局。界面近期按“克制的科学编辑风格”改版：单一主色、衬线标题、编号栏目，并以醒目横幅声明教学示例来源。可访问性有明确底线：按钮触达区域不小于 44\,px、表单字号不小于 16\,px、长文件名不破坏布局、配置错误可恢复。
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.80\linewidth]{dash-overview}
-\caption{离线看板全貌（改版后界面）：左栏“研究索引”提供节点树、关键词搜索与“局限/边界”筛选；中栏为 Mermaid 思维导图，支持拖拽、缩放、收起展开与结构关系图切换；右栏“阅读笔记”展示选中节点的类别、分析、通俗解释与证据卡片。页眉统计页数、节点数与分块覆盖，教学示例以醒目横幅声明来源。}
+\caption{离线看板全貌：左栏“研究索引”提供节点树、关键词搜索与“局限/边界”筛选；中栏为 Mermaid 思维导图，支持拖拽、缩放、收起展开与结构关系图切换；右栏“阅读笔记”展示选中节点的类别、分析、通俗解释与证据卡片。页眉统计页数、节点数与分块覆盖。}
 \label{fig:overview}
 \end{figure*}
-
-\subsection{合并、归纳与完整性检查}
-
-去重采取保守策略：仅当类别、推断标记与详细分析三者归一化一致（或名称相似度超过 0.96）时才合并节点，语义相反的结论不会被错误聚合。主题归纳按批（每批不超过 24 个节点）请求模型将发现归入 2--6 个内容主题，不套用固定模板；每个输入节点 ID 必须恰好分配一次，最终树叶节点集合必须等于全部分析节点，否则终止导出。该完整性断言使合并环节的节点丢失从“静默缺陷”变为“显式错误”。
 
 \begin{figure*}[t]
 \centering
@@ -101,89 +265,62 @@
 \label{fig:evidence}
 \end{figure*}
 
-\subsection{导图校验与离线看板}
+\section{实现与测试}\label{sec:test}
 
-同一主题树生成 Mermaid mindmap 与 flowchart 两种格式，均先经真实 \texttt{mermaid.parse()} 校验\citep{mermaid}，再在 Chromium 中实际渲染为 SVG；标签含非常规字符导致解析失败时，按规则清洗标签结构字符后重试。看板为单文件 HTML：样式、交互脚本、Mermaid 渲染器、结构化数据与预渲染 SVG 全部内嵌，可选内嵌原始 PDF，并以严格内容安全策略约束（\texttt{default-src 'none'}、\texttt{connect-src 'none'}：除内联资源与 data/blob 外禁止一切加载与外联）。自动化测试验证离线模式下无任何 HTTP(S) 请求。
+\subsection{运行参数与可复现性}
 
-看板交互包括：节点索引与全文关键词搜索、局限与边界筛选、思维导图与结构关系图切换、拖拽平移与滚轮缩放、主题收起展开、节点详情与证据面板（页码按钮跳转原文并高亮摘录）、HTML/SVG/Mermaid/JSON 四种导出、深浅主题切换与移动端适配。
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.42\linewidth]{dash-search}\hfill
-\includegraphics[width=0.42\linewidth]{dash-critical}
-\caption{检索与筛选。左：搜索“OCR”时索引收敛为 1 项，导图中不相关节点降低不透明度；右：“局限与边界”筛选仅保留局限性与应用边界类节点，便于快速核查论文自述局限。}
-\label{fig:filter}
-\end{figure*}
-
-\subsection{本地服务与安全边界}\label{sec:security}
-
-威胁模型覆盖三类攻击面。其一，\textbf{恶意论文文本}：论文内容可能内嵌指令式文本试图操纵模型；系统提示将其声明为数据，模型输出仅按固定 JSON 模式解析，自由文本不进入任何执行路径。其二，\textbf{本机服务暴露}：上传服务仅监听回环地址，校验 Host 与 Origin 头以阻断跨站请求与 DNS 重绑定；并发任务上限 3 个，单文件上限 80 MB，结果文件按白名单路由，杜绝路径穿越。其三，\textbf{凭据泄漏}：API Key 仅经环境变量或 \texttt{.env} 注入，不写入源码、日志与导出文件；认证失败的响应正文不落盘。
-
-\subsection{配置与可复现性}
-
-全部行为参数集中于八个环境变量（表~\ref{tab:config}），程序启动时校验取值边界，非法配置直接报错并给出中文原因。模型协议固定为 Chat Completions，不发送特定供应商才支持的参数，因此可无差别切换 DeepSeek\citep{deepseek2024v3}、本地开源模型或本报告使用的确定性模拟接口。
+全部行为参数集中于八个可配置项（表~\ref{tab:config}），程序启动时校验取值边界，非法配置直接报错并给出中文原因。模型协议固定为对话式补全兼容接口，不发送特定供应商才支持的参数，因此可无差别切换 DeepSeek\citep{deepseek2024v3}、本地开源模型或确定性模拟接口——后者使全流程测试不依赖任何真实凭据与外部网络。
 
 \begin{table}[t]
 \centering
 \small
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}p{0.40\linewidth}p{0.27\linewidth}p{0.15\linewidth}@{}}
+\begin{tabular}{@{}p{0.30\linewidth}p{0.30\linewidth}p{0.18\linewidth}@{}}
 \toprule
-\textbf{变量} & \textbf{取值范围} & \textbf{默认} \\
+\textbf{参数} & \textbf{取值范围} & \textbf{默认} \\
 \midrule
-LLM\_BASE\_URL & HTTP(S) 地址 & 必填 \\
-LLM\_API\_KEY & 非空，不落盘 & 必填 \\
-LLM\_MODEL & 非占位符 & 必填 \\
-CHUNK\_CHARS & 2000--24000 & 10000 \\
-LLM\_MAX\_TOKENS & 512--32000 & 5000 \\
-LLM\_TIMEOUT & $>0$ 秒 & 180 \\
-LLM\_RETRIES & 0--5 & 2 \\
-EMBED\_PDF & 0 / 1 & 1 \\
+模型服务地址 & 合法网址 & 必填 \\
+访问凭据 & 非空，不落盘 & 必填 \\
+模型标识 & 非占位符 & 必填 \\
+块预算 $B$ & 2000--24000 字符 & 10000 \\
+输出上限 & 512--32000 词元 & 5000 \\
+请求超时 & $>0$ 秒 & 180 \\
+重试次数 & 0--5 & 2 \\
+内嵌原文 & 开 / 关 & 开 \\
 \bottomrule
 \end{tabular}
-\caption{环境配置项与启动时校验的取值边界。}
+\caption{运行参数与启动时校验的取值边界。}
 \label{tab:config}
 \end{table}
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.42\linewidth]{dash-flowchart}\hfill
-\includegraphics[width=0.42\linewidth]{dash-dark}
-\caption{视图切换。左：结构关系图以有向层级呈现同一主题树，连线仅表示归属；右：深色主题下导图与面板同步重渲染，Mermaid 校验状态实时显示。}
-\label{fig:views}
-\end{figure*}
-
-\section{实现与测试}\label{sec:test}
-
-\subsection{模块构成}\label{sec:modules}
+\subsection{组件构成}\label{sec:modules}
 
 \begin{table}[t]
 \centering
 \small
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}p{0.23\linewidth}c p{0.36\linewidth}p{0.14\linewidth}@{}}
+\begin{tabular}{@{}p{0.26\linewidth}p{0.44\linewidth}p{0.16\linewidth}@{}}
 \toprule
-\textbf{模块} & \textbf{行数} & \textbf{职责} & \textbf{来源} \\
+\textbf{组件} & \textbf{职责} & \textbf{来源} \\
 \midrule
-parser.py & 106 & 页级提取、标题识别、来源分块 & 集成 \\
-analysis.py & 126 & 校验、匹配、去重、归纳 & 新增 \\
-llm.py & 68 & 协议客户端、JSON 修复 & 新增 \\
-pipeline.py & 79 & 流程编排、完整性断言 & 新增 \\
-render.py & 67 & 导图编译校验、看板导出 & 改造 \\
-server.py & 95 & 上传服务、安全中间件 & 新增 \\
-config.py & 40 & 配置与边界校验 & 新增 \\
-vendor/ & 177 & 数据模型、章节、导图编译 & 复用 \\
+解析组件 & 页级提取、标题识别、来源分块 & 集成 \\
+分析组件 & 结构校验、证据匹配、去重 & 新增 \\
+协议组件 & 模型调用、修复重试、用量统计 & 新增 \\
+编排组件 & 流程调度、完整性断言 & 新增 \\
+渲染组件 & 导图编译校验、看板导出 & 改造 \\
+服务组件 & 上传界面、安全中间件 & 新增 \\
+配置组件 & 参数与边界校验 & 新增 \\
 \bottomrule
 \end{tabular}
-\caption{代码构成（合计约 800 行）。\texttt{vendor/} 为 ScholarFlow 与 mindmap-generator 的锁定改造成果，原始授权文本随源码保留。}
+\caption{功能组件构成。第三方复用均锁定上游版本并随源码保留原始授权文本；分析、协议、编排与安全逻辑均为新增，便于审计。}
 \label{tab:modules}
 \end{table}
 
-表~\ref{tab:modules} 给出模块构成。第三方复用均锁定上游 commit 并随仓库保留许可文本；分析、协议、编排与安全相关逻辑均为新增，便于审计。
+表~\ref{tab:modules} 给出功能组件构成。全部第三方复用锁定上游版本并保留许可文本；分析、协议、编排与安全相关逻辑均为新增。
 
-\subsection{自动化测试}
+\subsection{测试方法与结果}
 
-测试套件共 16 项，全部通过（macOS 15 / Python 3.14 与 Windows / Python 3.12 双环境实测）。表~\ref{tab:tests} 按验证目标归纳。其中浏览器级上传流程测试以确定性模拟接口\footnote{模拟响应复用教学规则，仅覆盖教学样例关键词，不代表真实模型质量；接口实现随源码发布于 \texttt{scripts/mock\_llm.py}。}替代真实模型，经 uvicorn 临时端口与 Playwright 自动完成“上传 PDF $\rightarrow$ 任务轮询 $\rightarrow$ 打开看板 $\rightarrow$ 断言 SVG 渲染”全流程；界面回归组覆盖改版后的视觉与可访问性要求（按钮触达区域不小于 44\,px、表单字号不小于 16\,px、长文件名不破坏布局、配置错误可恢复）。
+测试套件共 16 项，全部通过（macOS 15 与 Windows 双环境实测）。测试策略有三个特点。其一，\textbf{确定性}：以随源码发布的确定性模拟接口替代真实模型\footnote{模拟响应基于教学样例规则，仅用于验证软件路径，不代表真实模型质量。}，使全流程测试不产生费用、可离线重复；其二，\textbf{浏览器级}：界面测试驱动真实浏览器完成“上传 $\rightarrow$ 任务轮询 $\rightarrow$ 打开看板 $\rightarrow$ 校验渲染”全流程，而非仅模拟请求；其三，\textbf{负面用例}：加密文档、伪造摘录、相反结论、非法响应等失败路径均有对应断言。表~\ref{tab:tests} 按验证目标归纳。
 
 \begin{table}[t]
 \centering
@@ -195,13 +332,13 @@ vendor/ & 177 & 数据模型、章节、导图编译 & 复用 \\
 全文覆盖（1） & 分块无截断；末页内容进入导图 \\
 证据核验（1） & 伪造摘录标记为未匹配；证据须归属当前块 \\
 合并安全（2） & 树完整保留；语义相反的结论不合并 \\
-异常处理（1） & 加密/扫描 PDF 给出可操作错误 \\
-协议健壮（2） & 非法 JSON 修复；密钥脱敏；401 不泄露正文 \\
+异常处理（1） & 加密/扫描文档给出可操作错误 \\
+协议健壮（2） & 非法响应修复；凭据脱敏；鉴权失败不泄露正文 \\
 导图安全（1） & 标签注入字符被清除 \\
 上传流程（1） & 浏览器级：上传 $\rightarrow$ 轮询 $\rightarrow$ 看板打开 \\
 离线交互（2） & 断网渲染、节点点击、四种导出、移动端 \\
 界面回归（2） & 长文件名、可恢复错误、键盘筛选、触达区域 \\
-访问控制（1） & 跨站请求 403；结果文件白名单 \\
+访问控制（1） & 跨站请求拒绝；结果文件白名单 \\
 \bottomrule
 \end{tabular}
 \caption{自动化测试覆盖（16 项全部通过，括号内为用例数）。}
@@ -210,15 +347,31 @@ vendor/ & 177 & 数据模型、章节、导图编译 & 复用 \\
 
 \subsection{陌生论文与离线核查}
 
-以公开论文《Attention Is All You Need》作为开发中不可见的真实双栏 PDF 进行抽取核查：15 页全部提取成功，254 个来源片段全部恰好分配至 7 个分析块，第 14 页文字不足的警告被正确保留而非掩盖，末页内容进入覆盖记录。离线方面，对生成的看板以浏览器离线上下文加载，外部资源请求计数为 0；看板体积约 2.8 MB（内嵌原始 PDF 时），可在移动端正常滚动与缩放。
+以公开论文《Attention Is All You Need》作为开发中不可见的真实双栏文档进行抽取核查：15 页全部提取成功，254 个来源块全部恰好分配至 7 个分析块（不变式 I1 成立），第 14 页文字不足的警告被正确保留而非掩盖，末页内容进入覆盖记录。离线方面，对生成的看板以浏览器离线上下文加载，外部资源请求计数为 0（不变式 I4）；看板体积约 2.8 MB（内嵌原始文档时），可在移动端正常滚动与缩放。
 
-\subsection{调用与成本模型}
+\subsection{调用与成本分析}
 
-模型调用次数可静态估计：$N_{\text{calls}} = C + R + F$，其中 $C$ 为分析块数，$R$ 为主题归纳批次数（每轮不超过 $\lceil n/24 \rceil$，轮数由分支因子 8 决定），$F\in\{0,1\}$ 为末轮小批量归纳；另有至多 $2C$ 次结构修复重试。输入开销与全文长度线性相关（每块约 \texttt{CHUNK\_CHARS} 字符），输出以 \texttt{LLM\_MAX\_TOKENS} 为上界。教学样例实测：4 页、46 个来源块、3 个分析块、11 个节点，共 5 次调用（3 次分析 + 2 次归纳），无修复重试，与该模型一致。
+模型调用次数可静态估计：
+\begin{equation}
+\begin{split}
+N_{\text{calls}} =\; & k \;+\; \sum_{r}\Bigl\lceil \tfrac{n_r}{24}\Bigr\rceil\\
+ & +\; \mathbb{1}\!\left[\,n_{\text{final}}>2\,\right] \;+\; N_{\text{repair}},
+\end{split}
+\label{eq:calls}
+\end{equation}
+其中 $k$ 为分析块数，$n_r$ 为第 $r$ 轮归纳的节点数（轮数以扇出 8 收缩，故为对数级），$N_{\text{repair}}\le 2k$ 为结构修复重试上界。输入开销与全文长度线性相关（每块约 $B$ 字符），输出以输出上限为界。教学样例实测：4 页、46 个来源块、3 个分析块、11 个节点，共 5 次调用（3 次分析 + 2 次归纳），无修复重试，与式~\eqref{eq:calls} 一致。
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.42\linewidth]{dash-search}\hfill
+\includegraphics[width=0.42\linewidth]{dash-critical}
+\caption{检索与筛选。左：搜索“OCR”时索引收敛为 1 项，导图中不相关节点降低不透明度；右：“局限与边界”筛选仅保留局限性与应用边界类节点，便于快速核查论文自述局限。}
+\label{fig:filter}
+\end{figure*}
 
 \subsection{端到端界面测试}
 
-我们在浏览器中对 12 项关键功能逐一操作并截图（图~\ref{fig:upload}--\ref{fig:mobile}）：配置检测、文件选择、进度反馈、完成跳转、导图渲染、节点选择、证据定位、原文高亮、关键词搜索、局限性筛选、结构图切换、深色主题、主题折叠与移动端布局，全部符合预期。测试经本地模拟模型接口驱动真实上传流程完成，看板由该次运行实际生成而非预置文件。界面近期按“克制的科学编辑风格”完成改版——单一蓝色主色、衬线标题、编号栏目（研究索引 / 阅读笔记）——本报告全部截图均为改版后实测。
+我们在浏览器中对 12 项关键功能逐一操作并截图（图~\ref{fig:upload}--\ref{fig:mobile}）：配置检测、文件选择、进度反馈、完成跳转、导图渲染、节点选择、证据定位、原文高亮、关键词搜索、局限性筛选、结构图切换、深色主题、主题折叠与移动端布局，全部符合预期。看板由该次运行实际生成而非预置文件。
 
 \begin{figure}[t]
 \centering
@@ -226,6 +379,18 @@ vendor/ & 177 & 数据模型、章节、导图编译 & 复用 \\
 \caption{移动端（390\,pt 视口）：三栏折叠为单列纵向排布，索引、导图与详情仍可独立操作，无横向溢出。}
 \label{fig:mobile}
 \end{figure}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.42\linewidth]{dash-flowchart}\hfill
+\includegraphics[width=0.42\linewidth]{dash-dark}
+\caption{视图切换。左：结构关系图以有向层级呈现同一主题树，连线仅表示归属；右：深色主题下导图与面板同步重渲染，导图校验状态实时显示。}
+\label{fig:views}
+\end{figure*}
+
+\section{讨论：设计取舍}
+
+四个关键取舍值得展开。\textbf{穷尽式分析对比检索式}：检索增强只看子集，成本低但可能漏掉末页局限；研脉选择全文覆盖，代价是调用次数与文档长度线性相关——对超长文档，可通过调小块预算换取更细的处理粒度。\textbf{真实渲染对比仅语法校验}：语法通过不等于能画出来，系统坚持在真实浏览器内核中渲染并检查产物，宁可多付一次启动成本。\textbf{保守去重对比语义聚类}：仅合并“几乎逐字相同”的发现，宁可冗余也不冒合并对立结论的风险；主题归纳交给模型，但以“标识恰好一次”的硬约束兜底。\textbf{单文件交付对比资源目录}：单文件牺牲体积换取“双击即读、拷贝即分享”的部署简单性，并以内容安全策略把离线性从约定升级为机制。
 
 \section{与比赛要求的对照}
 
@@ -238,26 +403,26 @@ vendor/ & 177 & 数据模型、章节、导图编译 & 复用 \\
 \textbf{评审维度} & \textbf{分值} & \textbf{状态与依据} \\
 \midrule
 一键跑通 & 30 & 已达成：命令行与上传界面均一次触发全流程 \\
-解析准确 & 25 & 机制就绪并经真实双栏 PDF 抽取核查；语义质量待真实模型验收 \\
+解析准确 & 25 & 机制就绪并经真实双栏文档抽取核查；语义质量待真实模型验收 \\
 看板可用 & 20 & 已达成：离线 0 外部请求，交互齐全 \\
 内容深度 & 20 & 已实现：页码/章节/摘录溯源、批判性标注、通俗解释 \\
-稳定鲁棒 & 15 & 已实现：JSON 修复、网络重试、导图规则修复、完整性断言 \\
-工程规范 & 10 & 已达成：文档完备、密钥不落盘、依赖可复现 \\
+稳定鲁棒 & 15 & 已实现：响应修复、网络重试、导图规则修复、完整性断言 \\
+工程规范 & 10 & 已达成：文档完备、凭据不落盘、依赖可复现 \\
 \bottomrule
 \end{tabular}
 \caption{与大赛评审维度的对照（合计 120 分）。}
 \label{tab:rubric}
 \end{table}
 
-表~\ref{tab:rubric} 对照大赛评审维度给出状态。基础部分（提取、分析、导图、看板、一键化）全部达成；提高部分中页码溯源、搜索、导图切换、导出、主题切换、语法自动修复与读者友好解释均已实现，未声称完成的包括图像公式理解、自动 OCR 与独立语义事实核验。
+表~\ref{tab:rubric} 对照大赛评审维度给出状态。基础部分（提取、分析、导图、看板、一键化）全部达成；提高部分中页码溯源、搜索、导图切换、导出、主题切换、语法自动修复与读者友好解释均已实现，未声称完成的包括图像公式理解、自动光学识别与独立语义事实核验。
 
 \section{局限与展望}
 
-系统目前存在四点局限。（1）\textbf{模型质量未经验收}：全部定量结果基于确定性模拟响应或抽取层核查，接入主办方 DeepSeek V4 Pro 后的科学分析准确率仍需人工核验；（2）\textbf{文本型 PDF 边界}：扫描件与图片型公式超出基础承诺，系统以显式警告而非静默降级处理；（3）\textbf{摘录匹配非蕴含判定}：证据核验只能确认引文存在，结论正确性仍需读者结合上下文判断，接入独立的蕴含核验通道是下一步方向；（4）\textbf{跨平台验证范围}：macOS 环境为本轮补充实测，正式提交材料仍以已声明的 Windows/Python~3.12 组合为准。此外，模拟接口仅覆盖教学样例关键词，对真实模型行为的回归价值有限，未来可扩充为基于录制响应的更广覆盖。
+系统目前存在四点局限。（1）\textbf{模型质量未经验收}：全部定量结果基于确定性模拟响应或抽取层核查，接入主办方指定模型后的科学分析准确率仍需人工核验；（2）\textbf{文本型文档边界}：扫描件与图片型公式超出基础承诺，系统以显式警告而非静默降级处理；（3）\textbf{摘录匹配非蕴含判定}：证据核验只能确认引文存在，结论正确性仍需读者结合上下文判断，接入独立的蕴含核验通道是下一步方向；（4）\textbf{模拟覆盖有限}：模拟接口仅覆盖教学样例关键词，对真实模型行为的回归价值有限，未来可扩充为基于录制响应的更广覆盖。此外，归纳轮数虽为对数级，超长文档的端到端时延仍与长度线性相关，值得探索按章节并行的分析调度。
 
 \section{结论}
 
-研脉系统以来源块与证据核验为中心组织整条流水线，将“模型会出错”作为设计前提而非异常路径，实现了从论文 PDF 到证据可溯、可离线使用的思维导图看板的一键转换。16 项自动化测试与 12 项界面功能测试全部通过，陌生论文抽取与离线场景核查未发现阻断性缺陷。系统已具备比赛基础部分的完整能力，剩余工作集中于真实模型接入后的质量验收。
+研脉系统以来源块与证据核验为中心组织整条流水线，将“模型会出错”作为设计前提而非异常路径：覆盖完备、证据局部、叶完整与离线自洽四条不变式把每一类失败都转化为显式错误。16 项自动化测试与 12 项界面功能测试全部通过，陌生论文抽取与离线场景核查未发现阻断性缺陷。系统已具备比赛基础部分的完整能力，剩余工作集中于真实模型接入后的质量验收。
 
 \bibliography{custom}
 
