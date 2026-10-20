@@ -10,7 +10,7 @@
 - **直接复用**：`scholarflow/models.py` → `src/paperweave/vendor/scholarflow_models.py`，使用 `PaperMeta`、`PaperContent`、`PaperSection`。
 - **选择性代码复用**：`scholarflow/parser/pdf_parser.py` 中的章节常量、正则、`_detect_sections` 与 `_guess_title_from_text` → `vendor/scholarflow_sections.py`，新增公开别名以供融合。
 - **改进**：在新的按页解析器里补充来源 ID、中文/Markdown 标题识别和字号/文字方向标题判断；避免将首页版权或侧边水印认成论文题目。
-- **流程参考**：独立解析、分析与生成阶段；不引入与本题无关的 PPT/LaTeX 功能和依赖，也不沿用 Markmap CDN 输出。
+- **流程参考**：独立解析、分析与生成阶段；不引入与论文阅读流程无关的 PPT/LaTeX 功能和依赖，也不沿用 Markmap CDN 输出。
 
 ## mindmap-generator
 
@@ -38,6 +38,6 @@
 
 ## 本项目新增
 
-`config.py`、按页来源提取适配器、结构化模型请求/重试、Unicode 引文匹配、全文分析记录、保守去重、带 ID 完整性检查的分层归纳、Mermaid 浏览器校验与规则修复、离线看板/导出、本地上传服务、命令行、验收测试和教学材料。
+`config.py`、按页来源提取适配器、结构化模型请求/重试、Unicode 引文匹配、全文分析记录、保守去重、带 ID 完整性检查的分层归纳、Mermaid 浏览器校验与规则修复、离线看板/导出、本地上传服务、命令行、自动化测试和教学材料。
 
-仓库克隆仅用于工作区参考，不放入提交包；上游 `.env` 不读取、不使用、不复制。没有将原项目附带的配置或密钥带入本项目。
+仓库克隆仅用于工作区参考，不随项目发布；上游 `.env` 不读取、不使用、不复制。没有将原项目附带的配置或密钥带入本项目。
